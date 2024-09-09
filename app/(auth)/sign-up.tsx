@@ -1,9 +1,20 @@
 import * as React from "react";
-import { TextInput, Button, View, Alert } from "react-native";
+import {
+  TextInput,
+  Button,
+  View,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text } from "@/components/Themed";
+import HeaderNavigation from "@/core/HeaderNavigation";
+import KeyBoard from "@/core/keyBoard";
+import MyInputText from "@/core/myInputText";
+import MyButton from "@/core/myButton";
 
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -59,42 +70,47 @@ export default function SignUpScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
-      <View>
-        {!pendingVerification && (
-          <>
-            <TextInput
-              autoCapitalize="none"
-              value={emailAddress}
-              placeholder="Email..."
-              onChangeText={(email) => setEmailAddress(email)}
-            />
-            <TextInput
-              value={password}
-              placeholder="Password..."
-              secureTextEntry={true}
-              onChangeText={(password) => setPassword(password)}
-            />
-            <Button title="Sign Up" onPress={onSignUpPress} />
-          </>
-        )}
-        {pendingVerification && (
-          <>
-            <TextInput
-              value={code}
-              placeholder="Code..."
-              onChangeText={(code) => setCode(code)}
-            />
-            <Button title="Verify Email" onPress={onPressVerify} />
-          </>
-        )}
-      </View>
-      <View>
-        <Text>alredy have account ? </Text>
-        <Link href="/sign-in">
-          <Text>Sign in</Text>
-        </Link>
-      </View>
-    </SafeAreaView>
+    <>
+      <HeaderNavigation pageTitle="" paddingTop={20} />
+
+      <KeyBoard>
+        <View style={{ gap: 6 }}>
+          <View style={{ gap: 6 }}>
+            {!pendingVerification && (
+              <>
+                <MyInputText
+                  value={emailAddress}
+                  placeholder="Email..."
+                  onChangeText={(email) => setEmailAddress(email)}
+                />
+                <MyInputText
+                  value={password}
+                  placeholder="Password..."
+                  secureTextEntry={true}
+                  onChangeText={(password) => setPassword(password)}
+                />
+                <MyButton body="Sign Up" onSignInPress={onSignUpPress} />
+              </>
+            )}
+            {pendingVerification && (
+              <>
+                <MyInputText
+                  value={code}
+                  placeholder="Code..."
+                  onChangeText={(code) => setCode(code)}
+                />
+                <MyButton body="Verify Email" onSignInPress={onPressVerify} />
+              </>
+            )}
+          </View>
+          <View>
+            <Text>alredy have account ? </Text>
+            <Link href="/sign-in">
+              <Text>Sign in</Text>
+            </Link>
+          </View>
+        </View>
+      </KeyBoard>
+    </>
   );
 }

@@ -1,10 +1,12 @@
-import { View, Text } from "react-native";
+import { View, Text, Button } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@clerk/clerk-expo";
-import { Redirect, Stack } from "expo-router";
+import { Redirect, Stack, useRouter } from "expo-router";
+import HeaderNavigation from "@/core/HeaderNavigation";
 
 export default function AuthRouterLayout() {
+  const router = useRouter();
   const { isSignedIn } = useAuth();
   if (isSignedIn) {
     return <Redirect href={"/(call)/"} />;
@@ -15,19 +17,17 @@ export default function AuthRouterLayout() {
         <Stack.Screen
           name="sign-in"
           options={{
-            title: "signe-in page",
-            headerShown: false,
+            headerLeft: () => (
+              <Button title="Back" onPress={() => router.back()} />
+            ),
           }}
         />
         <Stack.Screen
           name="sign-up"
           options={{
-            headerBackButtonMenuEnabled: true,
-            title: "create new account",
-            headerShown: true,
-            headerBackTitle: "sign-in ",
-            headerStyle: { backgroundColor: "#5F5DEC" },
-            headerTintColor: "white",
+            headerLeft: () => (
+              <Button title="Back" onPress={() => router.back()} />
+            ),
           }}
         />
       </Stack>
